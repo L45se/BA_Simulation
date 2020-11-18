@@ -1,0 +1,6 @@
+LOADLIBES+=-lm
+
+fld2vtk : .cpl/fld2vtk.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rtchecks.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/complex.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/fft.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rbmat.o  /pfs/data5/home/kit/istm/xt8786/fri_BWCL/parallel.o .cpl/dnsdata.o .cpl/rbmatmod.o .cpl/dnsdirect.o .cpl/convenience.o
+	$(CC) $(LDFLAGS) -o fld2vtk .cpl/fld2vtk.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rtchecks.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/complex.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/fft.o /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rbmat.o  /pfs/data5/home/kit/istm/xt8786/fri_BWCL/parallel.o .cpl/dnsdata.o .cpl/rbmatmod.o .cpl/dnsdirect.o .cpl/convenience.o $(LOADLIBES) $(LDLIBS)
+
+.cpl/fld2vtk.c .cpl/fld2vtk.d : fld2vtk.cpl /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rtchecks.cpl /pfs/data5/home/kit/istm/xt8786/fri_BWCL/complex.cpl /pfs/data5/home/kit/istm/xt8786/fri_BWCL/fft.cpl /pfs/data5/home/kit/istm/xt8786/fri_BWCL/rbmat.cpl /pfs/data5/home/kit/istm/xt8786/fri_BWCL/matrix.cmn /pfs/data5/home/kit/istm/xt8786/fri_BWCL/parallel.cpl dnsdata.cpl rbmatmod.cpl dnsdirect.cpl convenience.cpl

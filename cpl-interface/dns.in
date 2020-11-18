@@ -1,0 +1,9 @@
+19 1000 128           ! nx, ny, nz
+15.708  13.194689039519618       ! alfa0 beta0  
+10              					! ni
+2.0  -0.0340714285 1.0 	        ! a, ymin, ymax
+1.0  0.0  		     	    	! meanpx, meanpz
+0.0  0.0	         			! meanflowx meanflowz
+0.000 0.1 0.0      			! deltat, cflmax time
+0.1d0  20.0d0 1000.0d10 .TRUE.	! dt_field, dt_dave, t_max
+28000                  			! nstep
