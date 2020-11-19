@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 16 17:59:17 2020
+Created on Thu Nov 19 12:11:08 2020
 
-@author: davide
+@author: lasse
 """
-
 import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
-%matplotlib qt5
 
 def fftfit(x):
   while not x & 1:
@@ -54,33 +52,30 @@ def load_field(filename):
     #print(np.max(np.abs(np.imag(field))))
     return dns,mesh,field
 
-
-# Load data    
-dns, mesh, field = load_field('Dati.cart.80.out')
-dns, mesh, ffield = load_field('Force.cart.80.out')
-
-# Plot velocity field 
-plt.figure()
-vC = ['u', 'v', 'w']
-iC = 1
-plt.pcolormesh(mesh["z"],mesh["y"],field[iC,0,:,:].transpose())
-plt.title('Velocity component '+vC[iC]+' at a cross-section')
-plt.colorbar()
-plt.xlabel('z/Lz')
-plt.ylabel('y/Lz')
-plt.show()
-
-
-# Plot force field 
-plt.figure()
-vC = ['fx', 'fy', 'fz']
-iC = 2
-plt.pcolormesh(mesh["z"],mesh["y"],ffield[iC,0,:,:].transpose())
-plt.title('Force component '+vC[iC]+' at a cross-section')
-plt.colorbar()
-plt.xlabel('z/Lz')
-plt.ylabel('y/Lz')
-plt.show()
-
-F = ffield[2,:,:,:]
-D = ffield[1,:,:,:]
+def sicherePlots(d):
+    # Load data    
+    dns, mesh, field = load_field('Dati.cart.'+str(d)+'.out')
+    dns, mesh, ffield = load_field('Force.cart.'+str(d)+'.out')
+    
+    _=plt.figure()
+    vC = ['u', 'v', 'w']
+    iC = 1
+    _=plt.pcolormesh(mesh["z"],mesh["y"],field[iC,0,:,:].transpose())
+    _=plt.title('Velocity component '+vC[iC]+' at a cross-section')
+    _=plt.colorbar()
+    _=plt.xlabel('z/Lz')
+    _=plt.ylabel('y/Lz')
+    _=plt.savefig('Plots/VelocityBildZeit'+str(d)+'.png')
+    
+    _=plt.figure()
+    vC = ['fx', 'fy', 'fz']
+    iC = 2
+    _=plt.pcolormesh(mesh["z"],mesh["y"],ffield[iC,0,:,:].transpose())
+    _=plt.title('Force component '+vC[iC]+' at a cross-section')
+    _=plt.colorbar()
+    _=plt.xlabel('z/Lz')
+    _=plt.ylabel('y/Lz')
+    _=plt.savefig('Plots/ForceBildZeit'+str(d)+'.png')
+    
+for i in range(1,81):
+    sicherePlots(i)
