@@ -391,6 +391,7 @@ MODULE dnsdata
      integer(C_INT) :: iV,ix,iz
 #ifdef bodyforce
      real(C_DOUBLE) :: xx,zz,yy
+     real(C_DOUBLE) :: zz1,yy1 !the future zz and yy
 #endif
 #ifdef ibm
      real(C_DOUBLE) :: newcoef,oldcoef

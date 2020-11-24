@@ -1,4 +1,4 @@
-1 60 63       	!nx, ny, nz
+1 60 64       	!nx, ny, nz
 6.283185307 6.283185307    		!alfa0 beta0  
 52.2193211       		!1/ni
 2.5 0.0 10.0       !a_wandauflösung, ymin, ymax
@@ -8,6 +8,6 @@
 0.0025 0.2 0.2 .FALSE.  !dt_field, dt_dave, t_max, neustartfeld?
 10003                   !nstep
 1.05 75.0 -9.5 6.0		!alpha_force, a1_force, a2_force, a0_force
-0.92 40.0 12.0 6.0	!24.0	!beta_force, b1_force, b2_force, b0_force	
-78.48748					!c_force					
+0.92 40.0 12.0 24.0		!beta_force, b1_force, b2_force, b0_force	
+108.2836					!c_force					
 50.0				!nu_frequenz

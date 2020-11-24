@@ -8,6 +8,8 @@ Created on Thu Nov 19 12:11:08 2020
 import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
+%matplotlib inline
+plt.ioff()
 
 def fftfit(x):
   while not x & 1:
@@ -57,25 +59,36 @@ def sicherePlots(d):
     dns, mesh, field = load_field('Dati.cart.'+str(d)+'.out')
     dns, mesh, ffield = load_field('Force.cart.'+str(d)+'.out')
     
+    limit = 49
+    m = mesh["y"][0:limit]
+    
     _=plt.figure()
     vC = ['u', 'v', 'w']
     iC = 1
-    _=plt.pcolormesh(mesh["z"],mesh["y"],field[iC,0,:,:].transpose())
-    _=plt.title('Velocity component '+vC[iC]+' at a cross-section')
+    _=plt.pcolormesh(mesh["z"],m,field[iC,0,:,:limit].transpose())
+    _=plt.title('Velocity component '+vC[iC]+' at a cross-section'+" Time: "+str(d*0.0025))
     _=plt.colorbar()
     _=plt.xlabel('z/Lz')
     _=plt.ylabel('y/Lz')
-    _=plt.savefig('Plots/VelocityBildZeit'+str(d)+'.png')
+    if d < 10:    
+        _=plt.savefig('Plots/VelocityBildZeit0'+str(d)+'.png')
+    else:
+        _=plt.savefig('Plots/VelocityBildZeit'+str(d)+'.png')
+    plt.close(_)
     
     _=plt.figure()
     vC = ['fx', 'fy', 'fz']
     iC = 2
-    _=plt.pcolormesh(mesh["z"],mesh["y"],ffield[iC,0,:,:].transpose())
-    _=plt.title('Force component '+vC[iC]+' at a cross-section')
+    _=plt.pcolormesh(mesh["z"],m,ffield[iC,0,:,:limit].transpose())
+    _=plt.title('Force component '+vC[iC]+' at a cross-section'+" Time: "+str(d*0.0025))
     _=plt.colorbar()
     _=plt.xlabel('z/Lz')
     _=plt.ylabel('y/Lz')
-    _=plt.savefig('Plots/ForceBildZeit'+str(d)+'.png')
+    if d < 10:    
+        _=plt.savefig('Plots/ForceBildZeit0'+str(d)+'.png')
+    else:
+        _=plt.savefig('Plots/ForceBildZeit'+str(d)+'.png')
+    plt.close(_)
     
 for i in range(1,81):
     sicherePlots(i)

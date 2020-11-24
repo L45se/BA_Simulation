@@ -50,6 +50,9 @@ xx = (ix-1)*(2*PI/alfa0)/(2*nxd)
 yy = ABS(y(iy))
 zz = ((iz+nz0-1)*(2*PI/beta0)/nzd)
 
+yy1 = ABS(y(iy+1))  !Die beiden Variablen brauche ich noch nicht in dieser Version. 
+zz1 = ((iz+nz0)*(2*PI/beta0)/nzd) !Mit ihnen will ich mir die größe des KontrollVoumens berechnen.
+
 ! Define force (never assign, always increment the force)
 ! ------------------
 
