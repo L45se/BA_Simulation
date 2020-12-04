@@ -56,10 +56,6 @@ zz1 = ((iz+nz0)*(2*PI/beta0)/nzd) !Mit ihnen will ich mir die größe des Kontro
 ! Define force (never assign, always increment the force)
 ! ------------------
 
-phase_force = time * nu_frequenz - aint(time * nu_frequenz)
-
-
-
 !rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) +ABS(zz-0.5)*yy
 !IF (has_terminal) WRITE(*,*) ix,iz,iy,zz,rFdx(ix,iz,3,1)
 
@@ -69,7 +65,7 @@ rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) + c_force*((a1_force*(zz/(2*PI/beta0))+a2_forc
 
 
 else
-rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) + c_force*((a1_force*(1-zz/(2*PI/beta0))+a2_force*(1-zz/(2*PI/beta0))**2)*exp(-a0_force*(1-zz/(2*PI/beta0))**alpha_force)*(b1_force*(yy/(2*PI/beta0))+b2_force*(yy/(2*PI/beta0))**2)*exp(-b0_force*(yy/(2*PI/beta0))**beta_force))
+rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) - c_force*((a1_force*(1-zz/(2*PI/beta0))+a2_force*(1-zz/(2*PI/beta0))**2)*exp(-a0_force*(1-zz/(2*PI/beta0))**alpha_force)*(b1_force*(yy/(2*PI/beta0))+b2_force*(yy/(2*PI/beta0))**2)*exp(-b0_force*(yy/(2*PI/beta0))**beta_force))
 
 
 

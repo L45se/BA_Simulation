@@ -56,8 +56,8 @@ def load_field(filename):
 
 
 # Load data    
-dns, mesh, field = load_field('Dati.cart.80.out')
-dns, mesh, ffield = load_field('Force.cart.80.out')
+dns, mesh, field = load_field('Dati.cart.32.out')
+dns, mesh, ffield = load_field('Force.cart.32.out')
 
 limit = 49
 m = mesh["y"][0:limit]

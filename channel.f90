@@ -86,12 +86,18 @@ END IF
     ! Increment number of steps
     istep=istep+1
     ! Solve
-    time=time+2.0/RK1_rai(1)*deltat
+    ! RK3 - 1
+    phase_force = time * nu_frequenz - aint(time * nu_frequenz)
     CALL buildrhs(RK1_rai,.FALSE. ); CALL linsolve(RK1_rai(1)/deltat)    
+    time=time+2.0/RK1_rai(1)*deltat
+    ! RK3 - 2
+    phase_force = time * nu_frequenz - aint(time * nu_frequenz)
+    CALL buildrhs(RK2_rai,.FALSE.);  CALL linsolve(RK2_rai(1)/deltat)
     time=time+2.0/RK2_rai(1)*deltat
-    CALL buildrhs(RK2_rai,.FALSE.); CALL linsolve(RK2_rai(1)/deltat)
+    ! RK3 - 3
+    phase_force = time * nu_frequenz - aint(time * nu_frequenz)
+    CALL buildrhs(RK3_rai,.TRUE.);   CALL linsolve(RK3_rai(1)/deltat)    
     time=time+2.0/RK3_rai(1)*deltat
-    CALL buildrhs(RK3_rai,.TRUE.); CALL linsolve(RK3_rai(1)/deltat)    
     CALL outstats()
 #ifdef chron
     CALL CPU_TIME(timee)

@@ -90,5 +90,5 @@ def sicherePlots(d):
         _=plt.savefig('Plots/ForceBildZeit'+str(d)+'.png')
     plt.close(_)
     
-for i in range(1,81):
+for i in range(1,33):
     sicherePlots(i)

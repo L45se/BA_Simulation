@@ -38,7 +38,7 @@ MODULE dnsdata
   !Grid
   integer(C_INT), private :: iy
   real(C_DOUBLE), allocatable :: y(:),dy(:)
-  real(C_DOUBLE) :: dx,dz,factor
+  real(C_DOUBLE) :: dx,dz,factor,ffactor
   !Derivatives
   TYPE(Di), allocatable :: der(:)
   real(C_DOUBLE), dimension(-2:2) :: d040,d140,d14m1,d04n,d14n,d24n,d14np1
@@ -106,7 +106,7 @@ MODULE dnsdata
     READ(15, *) c_force
     READ(15, *) nu_frequenz
     CLOSE(15)
-    dx=PI/(alfa0*nxd); dz=2.0d0*PI/(beta0*nzd);  factor=1.0d0/(2.0d0*nxd*nzd)
+    dx=PI/(alfa0*nxd); dz=2.0d0*PI/(beta0*nzd);  factor=1.0d0/(2.0d0*nxd*nzd); ffactor=SQRT(1.0d0/(2.0d0*nxd*nzd));
   END SUBROUTINE read_dnsin
 
   !--------------------------------------------------------------!
@@ -465,8 +465,8 @@ MODULE dnsdata
          CALL MPI_Alltoall(Fdx(:,:,iV,1), 1, Mdx, Fdz(:,:,iV,1), 1, Mdz, MPI_COMM_X)
          CALL FFT(Fdz(1:nzd,1:nxB,iV,1))
        END DO
-       F(iy,0:nz,nx0:nxN,1:3)=Fdz(1:nz+1,1:nxB,1:3,1)*factor
-       F(iy,-nz:-1,nx0:nxN,1:3)=Fdz(nzd+1-nz:nzd,1:nxB,1:3,1)*factor
+       F(iy,0:nz,nx0:nxN,1:3)=Fdz(1:nz+1,1:nxB,1:3,1)  !*ffactor
+       F(iy,-nz:-1,nx0:nxN,1:3)=Fdz(nzd+1-nz:nzd,1:nxB,1:3,1)  !*ffactor
      END IF
 #endif
      rVVdx(1:2*nxd,1:nzB,4,i)  = rVVdx(1:2*nxd,1:nzB,1,i)  * rVVdx(1:2*nxd,1:nzB,2,i)*factor
@@ -744,9 +744,10 @@ MODULE dnsdata
      END IF
    END IF
    IF (has_terminal) THEN
-     WRITE(*,"(F6.4,3X,4(F11.6,3X),4(F9.4,3X),2(F9.6,3X))") &
-           time,dudy(1,1),dudy(1,2),dudy(2,1),dudy(2,2),fr(1)+corrpx*fr(3),meanpx+corrpx,fr(2)+corrpz*fr(3),meanpz+corrpz,runtime_global*deltat,deltat
-     WRITE(101,*) time,dudy(1,1),dudy(1,2),dudy(2,1),dudy(2,2),fr(1)+corrpx*fr(3),meanpx+corrpx,fr(2)+corrpz*fr(3),meanpz+corrpz,runtime_global*deltat,deltat
+     WRITE(*,"(F6.4,3X,4(F11.6,3X),4(F9.4,3X),2(F9.6,3X),F6.4)") &
+           !    dUdy|y0   dUdy|yN   dWdy|y0   dWdy|yN   flowrate_x         dP/dx         flowrate_z         dP/dz         CFL                   deltat phase 
+           time,dudy(1,1),dudy(1,2),dudy(2,1),dudy(2,2),fr(1)+corrpx*fr(3),meanpx+corrpx,fr(2)+corrpz*fr(3),meanpz+corrpz,runtime_global*deltat,deltat,phase_force
+     WRITE(101,*) time,dudy(1,1),dudy(1,2),dudy(2,1),dudy(2,2),fr(1)+corrpx*fr(3),meanpx+corrpx,fr(2)+corrpz*fr(3),meanpz+corrpz,runtime_global*deltat,deltat,phase_force
    END IF
    runtime_global=0
    !Save Dati.cart.out
