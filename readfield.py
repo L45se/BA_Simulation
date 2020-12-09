@@ -56,8 +56,8 @@ def load_field(filename):
 
 
 # Load data    
-dns, mesh, field = load_field('Dati.cart.1.out')
-dns, mesh, ffield = load_field('Force.cart.1.out')
+dns, mesh, field = load_field('Dati.cart.6.out')
+dns, mesh, ffield = load_field('Force.cart.6.out')
 
 # Plot velocity field 
 plt.figure()

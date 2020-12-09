@@ -9,7 +9,8 @@ Created on Mon Nov 16 17:59:17 2020
 import numpy as np
 from numpy import pi
 import matplotlib.pyplot as plt
-%matplotlib qt5
+import matplotlib.animation as animation
+#%matplotlib qt5
 
 def fftfit(x):
   while not x & 1:
@@ -56,36 +57,33 @@ def load_field(filename):
     field *= np.prod(field[0,:,:,0].shape)
     return dns,mesh,field
 
+# Plot velocity field
+# -------------------------------------------
+#
+# This will plot the velocity profile w(y) at the center 
+# of the actuator for a given number of phases
+# 
 
-# Load data    
-dns, mesh, field = load_field('Dati.cart.1.out')
-dns, mesh, ffield = load_field('Force.cart.1.out')
+# Load the last N phases and plot them
+N = 16
+nfmax = 271
+nfmin = nfmax-N+1
+# If this flag is true the results will be made dimensional
+# with the characteristic velocity "uchar" and the length "hchar".
+# This is useful to compare back against the experiment.
+doRescale = True
+uchar = 4.83
+hchar = 0.0125
 
-limit = 49
-m = mesh["y"][0:limit]
-
-# Plot velocity field 
-plt.figure()
-vC = ['u', 'v', 'w']
-iC = 1
-plt.pcolormesh(mesh["z"],mesh["y"],field[iC,0,:,:].transpose())
-plt.title('Velocity component '+vC[iC]+' at a cross-section')
-plt.colorbar()
-plt.xlabel('z/Lz')
-plt.ylabel('y/Lz')
+fig = plt.figure()
+for iF in range(nfmin,nfmax+1):
+   dns, mesh, field = load_field('Dati.cart.'+str(iF)+'.out')
+   if doRescale:
+     mesh["y"] *= hchar; mesh["z"] *= hchar; field *= uchar
+     plt.plot(field[2,0,dns["nzd"]//2,:],mesh["y"])
+   
+plt.xlabel(r'$w$')
+plt.ylabel(r'$y$')
+plt.ylim([0, 2*mesh["z"][-1]])
 plt.show()
 
-
-# Plot force field 
-plt.figure()
-vC = ['fx', 'fy', 'fz']
-iC = 2
-plt.pcolormesh(mesh["z"],mesh["y"],ffield[iC,0,:,:].transpose())
-plt.title('Force component '+vC[iC]+' at a cross-section')
-plt.colorbar()
-plt.xlabel('z/Lz')
-plt.ylabel('y/Lz')
-plt.show()
-
-F = ffield[2,:,:,:]
-D = field[1,:,:,:]
