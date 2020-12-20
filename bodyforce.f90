@@ -50,8 +50,8 @@ xx = (ix-1)*(2*PI/alfa0)/(2*nxd)
 yy = ABS(y(iy))
 zz = ((iz+nz0-1)*(2*PI/beta0)/nzd)
 
-yy1 = ABS(y(iy+1))  !Die beiden Variablen brauche ich noch nicht in dieser Version. 
-zz1 = ((iz+nz0)*(2*PI/beta0)/nzd) !Mit ihnen will ich mir die größe des KontrollVoumens berechnen.
+!yy1 = (2*PI/beta0)/nzd !um die Kraftfelder an der gleichsen stelle beginnen zu lassen  ABS(y(iy+1))  
+zz1 = (2*PI/beta0)   !((iz+nz0)*(2*PI/beta0)/nzd) Laenge in z_Richtung
 
 ! Define force (never assign, always increment the force)
 ! ------------------
@@ -60,14 +60,31 @@ zz1 = ((iz+nz0)*(2*PI/beta0)/nzd) !Mit ihnen will ich mir die größe des Kontro
 !IF (has_terminal) WRITE(*,*) ix,iz,iy,zz,rFdx(ix,iz,3,1)
 
 if(phase_force < 0.5)then
-rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) + c_force*((a1_force*(zz/(2*PI/beta0))+a2_force*(zz/(2*PI/beta0))**2)*exp(-a0_force*(zz/(2*PI/beta0))**alpha_force)*(b1_force*(yy/(2*PI/beta0))+b2_force*(yy/(2*PI/beta0))**2)*exp(-b0_force*(yy/(2*PI/beta0))**beta_force))
 
+if (zz > zz1*gap .and. zz < zz1*(1-gap))then
+ force_temp = c_force*(a1_force*((zz-gap*zz1)/l_length)+a2_force*((zz-gap*zz1)/l_length)**2)*exp(-a0_force*((zz-gap*zz1)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
+
+else
+force_temp=0
+endif 
+
+if(force_temp>=0)then
+rFdx(ix,iz,3,1) = force_temp + rFdx(ix,iz,3,1) 
+end if
 
 
 else
-rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) - c_force*((a1_force*(1-zz/(2*PI/beta0))+a2_force*(1-zz/(2*PI/beta0))**2)*exp(-a0_force*(1-zz/(2*PI/beta0))**alpha_force)*(b1_force*(yy/(2*PI/beta0))+b2_force*(yy/(2*PI/beta0))**2)*exp(-b0_force*(yy/(2*PI/beta0))**beta_force))
+
+if(zz > zz1*gap .and. zz < zz1*(1-gap))then
+ force_temp = c_force*(a1_force*((zz1-zz-gap*zz1)/l_length)+a2_force*((zz1-zz-gap*zz1)/l_length)**2)*exp(-a0_force*((zz1-zz-gap*zz1)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
+else
+force_temp=0
+endif
 
 
+if (force_temp>=0)then
+rFdx(ix,iz,3,1) = rFdx(ix,iz,3,1) -force_temp
+endif
 
 end if
 

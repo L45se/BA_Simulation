@@ -34,6 +34,9 @@ MODULE dnsdata
   real(C_DOUBLE) :: alpha_force, beta_force , a1_force,a2_force,a0_force,b1_force,b2_force,b0_force, c_force
   real(C_DOUBLE) :: nu_frequenz 
   real(C_DOUBLE) :: phase_force
+  real(C_DOUBLE) :: l_length
+  real(C_DOUBLE) :: force_temp
+  real(C_DOUBLE) :: gap
   
   !Grid
   integer(C_INT), private :: iy
@@ -107,6 +110,9 @@ MODULE dnsdata
     READ(15, *) nu_frequenz
     CLOSE(15)
     dx=PI/(alfa0*nxd); dz=2.0d0*PI/(beta0*nzd);  factor=1.0d0/(2.0d0*nxd*nzd); ffactor=SQRT(1.0d0/(2.0d0*nxd*nzd));
+    gap = 0.125
+    force_temp = 0
+    l_length = 1
   END SUBROUTINE read_dnsin
 
   !--------------------------------------------------------------!
@@ -465,8 +471,8 @@ MODULE dnsdata
          CALL MPI_Alltoall(Fdx(:,:,iV,1), 1, Mdx, Fdz(:,:,iV,1), 1, Mdz, MPI_COMM_X)
          CALL FFT(Fdz(1:nzd,1:nxB,iV,1))
        END DO
-       F(iy,0:nz,nx0:nxN,1:3)=Fdz(1:nz+1,1:nxB,1:3,1)  !*ffactor
-       F(iy,-nz:-1,nx0:nxN,1:3)=Fdz(nzd+1-nz:nzd,1:nxB,1:3,1)  !*ffactor
+       F(iy,0:nz,nx0:nxN,1:3)=Fdz(1:nz+1,1:nxB,1:3,1)*factor
+       F(iy,-nz:-1,nx0:nxN,1:3)=Fdz(nzd+1-nz:nzd,1:nxB,1:3,1)*factor
      END IF
 #endif
      rVVdx(1:2*nxd,1:nzB,4,i)  = rVVdx(1:2*nxd,1:nzB,1,i)  * rVVdx(1:2*nxd,1:nzB,2,i)*factor
@@ -585,6 +591,7 @@ MODULE dnsdata
       END DO;        END DO;        END DO
       IF (has_average) THEN
         DO CONCURRENT (iy=ny0-2:nyN+2)
+          !R(iy,0,0,1)=meanpx*(ymax-ymin)/ni*(y(iy)/(ymax-ymin))*(2-y(iy)/(ymax-ymin))
           !R(iy,0,0,1)=3*0.5*y(iy)*(2-y(iy))  !+ 0.01*SIN(8*y(iy)*2*PI)/ni
           !V(iy,0,0,1)=y(iy)*(2-y(iy))*3.d0/2.d0 + 0.001*SIN(8*y(iy)*2*PI);
           !V(iy,0,0,1)=y(iy)-1
