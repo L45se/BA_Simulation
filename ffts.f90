@@ -26,7 +26,7 @@ MODULE ffts
 
 CONTAINS
 
-#ifdef bodyforce
+#ifdef ibm
    SUBROUTINE init_fft(VVdz,VVdx,rVVdx,Fdz,Fdx,rFdx,nxd,nxB,nzd,nzB)
 #else
    SUBROUTINE init_fft(VVdz,VVdx,rVVdx,nxd,nxB,nzd,nzB)
@@ -34,7 +34,7 @@ CONTAINS
      integer(C_INT), intent(in) :: nxd,nxB,nzd,nzB
      complex(C_DOUBLE_COMPLEX), pointer, dimension(:,:,:,:), intent(out) :: VVdx, VVdz
      real(C_DOUBLE), pointer, dimension(:,:,:,:), intent(out) :: rVVdx
-#ifdef bodyforce
+#ifdef ibm
      complex(C_DOUBLE_COMPLEX), pointer, dimension(:,:,:,:), intent(out) :: Fdx, Fdz
      real(C_DOUBLE), pointer, dimension(:,:,:,:), intent(out) :: rFdx
 #endif
@@ -43,14 +43,14 @@ CONTAINS
      !Allocate aligned memory
      ptrVVdz=fftw_alloc_complex(int(nxB*nzd*6*6, C_SIZE_T))
      ptrVVdx=fftw_alloc_complex(int((nxd+1)*nzB*6*6, C_SIZE_T))
-#ifdef bodyforce
+#ifdef ibm
      ptrFdz=fftw_alloc_complex(int(nxB*nzd*3, C_SIZE_T))
      ptrFdx=fftw_alloc_complex(int((nxd+1)*nzB*3, C_SIZE_T))
 #endif
      !Convert C to F pointer
      CALL c_f_pointer(ptrVVdz, VVdz, [nzd,nxB,6,6]);  CALL c_f_pointer(ptrVVdx,   VVdx, [nxd+1,nzB,6,6])
                                                       CALL c_f_pointer(ptrVVdx,  rVVdx, [2*(nxd+1),nzB,6,6])
-#ifdef bodyforce
+#ifdef ibm
      CALL c_f_pointer(ptrFdz,  Fdz,  [nzd,nxB,3,1]);  CALL c_f_pointer(ptrFdx,     Fdx, [nxd+1,nzB,3,1])
                                                       CALL c_f_pointer(ptrFdx,    rFdx, [2*(nxd+1),nzB,3,1])
 #endif
@@ -97,7 +97,7 @@ CONTAINS
 
    SUBROUTINE free_fft()
      CALL fftw_free(ptrVVdx); CALL fftw_free(ptrVVdz); 
-#ifdef bodyforce
+#ifdef ibm
      CALL fftw_free(ptrFdx); CALL fftw_free(ptrFdz);
 #endif
    END SUBROUTINE free_fft

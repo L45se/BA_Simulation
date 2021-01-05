@@ -2,8 +2,8 @@
 
 ####
 F90 = mpif90
-LIB = /home/lasse/Code/fftw-3.3.8/lib
-INC = /home/lasse/Code/fftw-3.3.8/include
+LIB = /net/istmbellatrix/users/hi180/fftw-3.3.8/lib
+INC = /net/istmbellatrix/users/hi180/fftw-3.3.8/include
 
 # INTEL (uncomment following line for INTEL compiler)
 # FLAGS = -cpp -Ofast -no-wrap-margin

@@ -9,7 +9,7 @@
 ! Add a bodyforce 
 #define bodyforce
 ! define a bodyforce in space (ibm)
-!#define ibm
+#define ibm
 ! Measure per timestep execution time
 #define chron
 ! Distrubute processes among processor so that

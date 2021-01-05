@@ -31,13 +31,12 @@ MODULE dnsdata
   complex(C_DOUBLE_COMPLEX), allocatable :: ialfa(:),ibeta(:)
   real(C_DOUBLE), allocatable :: k2(:,:)
   logical :: time_from_restart
-  real(C_DOUBLE) :: alpha_force, beta_force , a1_force,a2_force,a0_force,b1_force,b2_force,b0_force, c_force
+  real(C_DOUBLE) :: alpha_force, beta_force , a1_force,a2_force,a0_force,b1_force,b2_force,b0_force, c_force, c_kor
   real(C_DOUBLE) :: nu_frequenz 
   real(C_DOUBLE) :: phase_force
   real(C_DOUBLE) :: l_length
   real(C_DOUBLE) :: force_temp
-  real(C_DOUBLE) :: gap
-  
+  real(C_DOUBLE) :: gap  
   !Grid
   integer(C_INT), private :: iy
   real(C_DOUBLE), allocatable :: y(:),dy(:)
@@ -107,12 +106,13 @@ MODULE dnsdata
     READ(15, *) alpha_force, a1_force, a2_force, a0_force
     READ(15, *) beta_force, b1_force, b2_force, b0_force
     READ(15, *) c_force
+    READ(15, *) c_kor
     READ(15, *) nu_frequenz
     CLOSE(15)
     dx=PI/(alfa0*nxd); dz=2.0d0*PI/(beta0*nzd);  factor=1.0d0/(2.0d0*nxd*nzd); ffactor=SQRT(1.0d0/(2.0d0*nxd*nzd));
-    gap = 0.125
-    force_temp = 0
-    l_length = 1
+        gap = 0.125
+        force_temp = 0
+        l_length = 2*PI/beta0
   END SUBROUTINE read_dnsin
 
   !--------------------------------------------------------------!
@@ -397,7 +397,7 @@ MODULE dnsdata
      integer(C_INT) :: iV,ix,iz
 #ifdef bodyforce
      real(C_DOUBLE) :: xx,zz,yy
-     real(C_DOUBLE) :: zz1,yy1 !the future zz and yy
+     real(C_DOUBLE) :: Lz,yy1 !the future zz and yy
 #endif
 #ifdef ibm
      real(C_DOUBLE) :: newcoef,oldcoef

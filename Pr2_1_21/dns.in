@@ -1,0 +1,13 @@
+1 60 64       	!nx, ny, nz
+6.283185307 19.634954   		!alfa0 beta0  
+4025       		!1/ni
+2.5 0.0 10.0       !a_wandauflösung, ymin, ymax
+0.0 0.0  		!meanpx, meanpz
+0.0  0.0 	        !meanflowx meanflowz
+0.0000775 0.0 0.0       !deltat, cflmax time
+0.484375 200 30.0 .FALSE.  !dt_field, dt_dave, t_max, neustartfeld?
+4000001                   !nstep
+1.05 75.0 -9.5 7.0		!alpha_force, a1_force, a2_force, a0_force
+0.92 20.0 12.0 24.0		!beta_force, b1_force, b2_force, b0_force	
+19.2688				!c_force					
+0.129032258064516				!nu_frequenz

@@ -51,7 +51,7 @@ yy = ABS(y(iy))
 zz = ((iz+nz0-1)*(2*PI/beta0)/nzd)
 
 !yy1 = (2*PI/beta0)/nzd !um die Kraftfelder an der gleichsen stelle beginnen zu lassen  ABS(y(iy+1))  
-zz1 = (2*PI/beta0)   !((iz+nz0)*(2*PI/beta0)/nzd) Laenge in z_Richtung
+Lz = (2*PI/beta0)!- (2*PI/beta0)/nzd  !((iz+nz0)*(2*PI/beta0)/nzd) Laenge in z_Richtung
 
 ! Define force (never assign, always increment the force)
 ! ------------------
@@ -61,8 +61,8 @@ zz1 = (2*PI/beta0)   !((iz+nz0)*(2*PI/beta0)/nzd) Laenge in z_Richtung
 
 if(phase_force < 0.5)then
 
-if (zz > zz1*gap .and. zz < zz1*(1-gap))then
- force_temp = c_force*(a1_force*((zz-gap*zz1)/l_length)+a2_force*((zz-gap*zz1)/l_length)**2)*exp(-a0_force*((zz-gap*zz1)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
+if (zz > Lz*gap .and. zz < Lz*(1-gap))then
+ force_temp = c_force*c_kor/l_length/l_length*(a1_force*((zz-gap*Lz)/l_length)+a2_force*((zz-gap*Lz)/l_length)**2)*exp(-a0_force*((zz-gap*Lz)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
 
 else
 force_temp=0
@@ -75,8 +75,8 @@ end if
 
 else
 
-if(zz > zz1*gap .and. zz < zz1*(1-gap))then
- force_temp = c_force*(a1_force*((zz1-zz-gap*zz1)/l_length)+a2_force*((zz1-zz-gap*zz1)/l_length)**2)*exp(-a0_force*((zz1-zz-gap*zz1)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
+if(zz > Lz*gap .and. zz < Lz*(1-gap))then
+ force_temp = c_force*c_kor/l_length/l_length*(a1_force*((zz-gap*Lz)/l_length)+a2_force*((zz-gap*Lz)/l_length)**2)*exp(-a0_force*((zz-gap*Lz)/l_length)**alpha_force)*((b1_force*(yy/l_length))+b2_force*(yy/l_length)**2)*exp(-b0_force*(yy/l_length)**beta_force)
 else
 force_temp=0
 endif
